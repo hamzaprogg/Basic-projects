@@ -1,0 +1,56 @@
+#Simple calculator      GUI INTERFACE
+import tkinter as tk
+def add():
+    num1 = float(entry_num1.get())
+    num2 = float(entry_num2.get())
+    
+    
+    result.config(text = f'Result: {num1 + num2}')
+    
+def subtract():
+    num1 = float(entry_num1.get())
+    num2 = float(entry_num2.get())
+    
+    result.config(text = f'Result: {num1 - num2}')
+    
+def multiply():
+    num1 = float(entry_num1.get())
+    num2 = float(entry_num2.get())
+    
+    result.config(text = f'Result: {num1 * num2}')
+    
+def divide():
+    num1 = float(entry_num1.get())
+    num2 = float(entry_num2.get())
+    
+    result.config(text = f'Result: {num1 / num2}')
+    
+window = tk.Tk()
+    
+window.title("Simple Calculator")
+entry_num1 = tk.Entry(window)
+entry_num1.grid(row = 0 , column = 0)
+
+entry_num2 = tk.Entry(window)
+entry_num2.grid(row= 0 , column= 1)
+
+add_button = tk.Button(window, text = '+', command  = add)
+add_button.grid(row= 1 , column = 0)
+
+subtract_button = tk.Button(window, text = '-', command = subtract)
+subtract_button.grid(row = 1 , column=1 )
+    
+multiply_button = tk.Button(window, text="*", command=multiply)
+multiply_button.grid(row=2, column=0)
+
+divide_button = tk.Button(window, text="/", command=divide)
+divide_button.grid(row=2, column=1)
+
+
+result = tk.Label(window, text="Result:")
+result.grid(row=3, columnspan=2)
+
+
+window.mainloop()
+    
+  
