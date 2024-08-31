@@ -1,0 +1,53 @@
+def welcome_screen():
+    print("Welcome to a basic calculator")
+    print("You will have to enter an operator out of +, -, /, *")
+
+def addition(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+
+def multiply(a, b):
+    return a * b
+
+def divide(a, b):
+    if b == 0:
+        return "Error: Division by 0"
+    return a / b
+
+def main():
+    welcome_screen()
+    while True:
+        try:
+            # Prompt for user input
+            num1 = float(input("Enter the first number: "))
+            operator = input("Please enter the operator (+, -, /, *): ")
+            num2 = float(input("Enter the second number: "))
+
+            # Perform the calculation based on the operator
+            if operator == '+':
+                result = addition(num1, num2)
+            elif operator == '-':
+                result = subtract(num1, num2)
+            elif operator == '*':
+                result = multiply(num1, num2)
+            elif operator == '/':
+                result = divide(num1, num2)
+            else:
+                print("Invalid operator. Please try again.")
+                continue  # Restart the loop if the operator is invalid
+
+            print("Result: ", result)
+
+        except ValueError:
+            print("Invalid input! Please enter numeric values.")
+            continue  # Restart the loop if the input is not numeric
+
+        # Ask if the user wants to continue
+        again = input("Do you want to calculate again? (yes/no): ").strip().lower()
+        if again != 'yes':
+            break  # Exit the loop if the user does not want to continue
+
+if __name__ == "__main__":
+    main()
