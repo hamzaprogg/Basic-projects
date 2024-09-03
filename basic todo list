@@ -1,0 +1,53 @@
+# Step 1: Initialize an empty to-do list
+todo_list = []
+
+# Step 2: Function to add a task
+def add_task(task):
+    todo_list.append(task)
+    print(f'Task "{task}" added to the list.')
+
+# Step 3: Function to view all tasks
+def view_tasks():
+    if not todo_list:
+        print("The to-do list is empty.")
+    else:
+        print("To-Do List:")
+        for index, task in enumerate(todo_list, start=1):
+            print(f"{index}. {task}")
+
+# Step 4: Function to delete a task
+def delete_task(task_number):
+    if task_number < 1 or task_number > len(todo_list):
+        print("Invalid task number.")
+    else:
+        removed_task = todo_list.pop(task_number - 1)
+        print(f'Task "{removed_task}" has been removed.')
+
+# Step 5: Menu to interact with the to-do list
+def display_menu():
+    print("\nTo-Do List Menu:")
+    print("1. Add Task")
+    print("2. View Tasks")
+    print("3. Delete Task")
+    print("4. Exit")
+
+while True:
+    display_menu()
+    choice = input("Enter your choice (1-4): ")
+
+    if choice == '1':
+        task = input("Enter the task you want to add: ")
+        add_task(task)
+    elif choice == '2':
+        view_tasks()
+    elif choice == '3':
+        try:
+            task_number = int(input("Enter the task number to delete: "))
+            delete_task(task_number)
+        except ValueError:
+            print("Please enter a valid number.")
+    elif choice == '4':
+        print("Exiting the to-do list application. Goodbye!")
+        break
+    else:
+        print("Invalid choice. Please enter a number between 1 and 4.")
