@@ -1,0 +1,59 @@
+def create_new_file():
+    file_name = input("Enter a file name: ")
+    with open(file_name, 'w') as f:
+        print(f"File {file_name} created successfully!")
+
+def open_existing_file():
+    file_name = input("Enter a file name: ")
+    try:
+        with open(file_name, 'r') as f:
+            contents = f.read()
+            print("File contents:")
+            print(contents)
+    except FileNotFoundError:
+        print(f"File {file_name} not found!")
+
+def save_file():
+    file_name = input("Enter a file name: ")
+    contents = input("Enter the contents to be saved: ")
+    with open(file_name, 'w') as f:
+        f.write(contents)
+        print(f"File {file_name} saved successfully!")
+
+def edit_file():
+    file_name = input("Enter a file name: ")
+    try:
+        with open(file_name, 'r') as f:
+            contents = f.read()
+            print("File contents:")
+            print(contents)
+        new_contents = input("Enter the new contents: ")
+        with open(file_name, 'w') as f:
+            f.write(new_contents)
+            print(f"File {file_name} edited successfully!")
+    except FileNotFoundError:
+        print(f"File {file_name} not found!")
+
+def main():
+    while True:
+        print("1. Create a new file")
+        print("2. Open an existing file")
+        print("3. Save a file")
+        print("4. Edit a file")
+        print("5. Exit")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            create_new_file()
+        elif choice == '2':
+            open_existing_file()
+        elif choice == '3':
+            save_file()
+        elif choice == '4':
+            edit_file()
+        elif choice == '5':
+            break
+        else:
+            print("Invalid choice. Please try again!")
+
+if __name__ == "__main__":
+    main()
