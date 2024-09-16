@@ -1,0 +1,170 @@
+#SIMPLE INTENT BASED CHATBOT
+#Conversational chatbot intent based
+import re
+import random
+
+# Knowledge base (responses to common questions, phrases, and keywords)
+knowledge_base = {
+    "hello": ["Hi! How can I help you?", "Hello! What's on your mind?"],
+    "goodbye": ["Goodbye! It was nice chatting with you.", "See you later!"],
+    "thanks": ["You're welcome!", "No problem!"],
+    "how are you": ["I'm doing well, thanks!", "I'm a chatbot, I don't have feelings."],
+      "hello": ["Hi! How can I help you?", "Hello! What's on your mind?"],
+    "goodbye": ["Goodbye! It was nice chatting with you.", "See you later!"],
+    "thanks": ["You're welcome!", "No problem!"],
+    "how are you": ["I'm doing well, thanks!", "I'm a chatbot, I don't have feelings."],
+    "hi": ["Hey! What's up?", "Hi there! How can I assist you?"],
+    "hey": ["Hey! How's it going?", "What's up?"],
+    "bro": ["What's good bro?", "Hey bro, how can I help?"],
+    "bruh": ["Bruh, what's poppin'?", "Hey bruh, need any assistance?"],
+    "what's up": ["Not much, just hanging out!", "Just waiting for your questions!"],
+    "howdy": ["Howdy! How can I help you today?", "Hey there, partner!"],
+    "hola": ["Hola! ¿Cómo puedo ayudarte?", "Hey, what's up?"],
+    "bonjour": ["Bonjour! Comment puis-je vous aider?", "Hey, what's new?"],
+    "greetings": ["Greetings! How can I assist you?", "Hello! What brings you here?"],
+    "hi there": ["Hi there! How can I help?", "Hey, what's on your mind?"],
+    "long time no talk": ["It's great to catch up! How can I help?", "Hey, what's new with you?"],
+    "long time no see": ["It's great to see you again! How can I assist you?", "Hey, what's up?"],
+    "what's good": ["Not much, just chillin'!", "Just waiting for your questions!"],
+    "yo": ["Yo! What's up?", "Hey, what's good?"],
+    "yoo": ["Yoo! How can I help?", "Hey, what's poppin'?"],
+    "heyyy": ["Heyyy! How can I assist you?", "Hey, what's up?"],
+    "hiiii": ["Hiiii! How can I help?", "Hey, what's on your mind?"],
+    "hii": ["Hii! How can I assist you?", "Hey, what's good?"],
+    "hihi": ["Hihi! How can I help?", "Hey, what's up?"],
+    "hehe": ["Hehe, what's so funny?", "Haha, what's going on?"],
+    "haha": ["Haha, that's great!", "Hehe, what's so funny?"],
+    "lol": ["Lol, that's hilarious!", "Haha, what's going on?"],
+    "lmao": ["Lmao, that's so funny!", "Haha, what's going on?"],
+    "rofl": ["Rofl, that's hilarious!", "Haha, what's going on?"],
+    "good morning": ["Good morning! How can I help?", "Morning! What's on your mind?"],
+    "good afternoon": ["Good afternoon! How can I assist you?", "Afternoon! What's up?"],
+    "good evening": ["Good evening! How can I help?", "Evening! What's on your mind?"],
+    "good night": ["Good night! Sweet dreams!", "Night! See you later!"],
+    "gm": ["Good morning! How can I help?", "Morning! What's on your mind?"],
+    "ga": ["Good afternoon! How can I assist you?", "Afternoon! What's up?"],
+    "ge": ["Good evening! How can I help?", "Evening! What's on your mind?"],
+    "gn": ["Good night! Sweet dreams!", "Night! See you later!"],
+    "bye": ["Goodbye! It was nice chatting with you.", "See you later!"],
+    "see you later": ["See you later! It was great chatting with you.", "Goodbye!"],
+    "ttyl": ["TTYL! It was great chatting with you.", "See you later!"],
+    "talk to you later": ["Talk to you later! It was great chatting with you.", "Goodbye!"],
+    "laters": ["Laters! It was great chatting with you.", "See you later!"],
+    "cya": ["CYA! It was great chatting with you.", "See you later!"],
+    "see ya": ["See ya! It was great chatting with you.", "Goodbye!"],
+    "toodles": ["Toodles! It was great chatting with you.", "See you later!"],
+    "cheerio": ["Cheerio! It was great chatting with you.", "Goodbye!"],
+    "so long": ["So long! It was great chatting with you.", "See you later!"],
+    "farewell": ["Farewell! It was great chatting with you.", "Goodbye!"],
+    "adieu": ["Adieu! It was great chatting with you.", "Goodbye!"],
+    "au revoir": ["Au revoir! It was great chatting with you.", "Goodbye!"],
+    "auf wiedersehen": ["Auf Wiedersehen! It was great chatting with you.", "Goodbye!"],
+    "hasta la vista": ["Hasta la vista! It was great chatting with you.", "Goodbye!"],
+    "until next time": ["Until next time! It was great chatting with you.", "Goodbye!"],
+    "until we meet again": ["Until we meet again! It was great chatting with you.", "Goodbye!"],
+    "take care": ["Take care! It was great chatting with you.", "Goodbye!"],
+    "stay safe": ["Stay safe! It was great chatting with you.", "Goodbye!"],
+    "all the best": ["All the best! It was great chatting with you.", "Goodbye!"],
+    "best regards": ["Best regards! It was great chatting with you.", "Goodbye!"],
+    "kind regards": ["Kind regards! It was great chatting with you.", "Goodbye!"],
+    "warm regards": ["Warm regards! It was great chatting with you.", "Goodbye!"],
+    "thanks for chatting": ["Thanks for chatting! It was great talking to you.", "Goodbye!"],
+    "thanks for talking": ["Thanks for talking! It was great chatting with you.", "Goodbye!"],
+    "it was nice talking to you": ["It was nice talking to you! Thanks for chatting.", "Goodbye!"],
+    "it was great talking to you": ["It was great talking to you! Thanks for chatting.", "Goodbye!"],
+    "nice talking to you": ["Nice talking to you! Thanks for chatting.", "Goodbye!"],
+    "great talking to you": ["Great talking to you! Thanks for chatting.", "Goodbye!"],
+     "it was nice chatting with you": ["It was nice chatting with you! Thanks for talking.", "Goodbye!"],
+    "it was great chatting with you": ["It was great chatting with you! Thanks for talking.", "Goodbye!"],
+    "nice chatting with you": ["Nice chatting with you! Thanks for talking.", "Goodbye!"],
+    "great chatting with you": ["Great chatting with you! Thanks for talking.", "Goodbye!"],
+    "have a good one": ["Have a good one! It was great chatting with you.", "Goodbye!"],
+    "have a great day": ["Have a great day! It was great chatting with you.", "Goodbye!"],
+    "have a nice day": ["Have a nice day! It was great chatting with you.", "Goodbye!"],
+    "have a good night": ["Have a good night! It was great chatting with you.", "Goodbye!"],
+    "have a great night": ["Have a great night! It was great chatting with you.", "Goodbye!"],
+    "have a nice night": ["Have a nice night! It was great chatting with you.", "Goodbye!"],
+    "take it easy": ["Take it easy! It was great chatting with you.", "Goodbye!"],
+    "stay cool": ["Stay cool! It was great chatting with you.", "Goodbye!"],
+    "stay awesome": ["Stay awesome! It was great chatting with you.", "Goodbye!"],
+    "stay fantastic": ["Stay fantastic! It was great chatting with you.", "Goodbye!"],
+    "stay amazing": ["Stay amazing! It was great chatting with you.", "Goodbye!"],
+    "you're welcome": ["You're welcome! It was great chatting with you.", "No problem!"],
+    "no problem": ["No problem! It was great chatting with you.", "You're welcome!"],
+    "no worries": ["No worries! It was great chatting with you.", "You're welcome!"],
+    "no hassle": ["No hassle! It was great chatting with you.", "You're welcome!"],
+    "no stress": ["No stress! It was great chatting with you.", "You're welcome!"],
+    "alright": ["Alright! It was great chatting with you.", "Goodbye!"],
+    "okay": ["Okay! It was great chatting with you.", "Goodbye!"],
+    "ok": ["Ok! It was great chatting with you.", "Goodbye!"],
+    "k": ["K! It was great chatting with you.", "Goodbye!"],
+    "kk": ["Kk! It was great chatting with you.", "Goodbye!"],
+    "cool": ["Cool! It was great chatting with you.", "Goodbye!"],
+    "awesome": ["Awesome! It was great chatting with you.", "Goodbye!"],
+    "fantastic": ["Fantastic! It was great chatting with you.", "Goodbye!"],
+    "amazing": ["Amazing! It was great chatting with you.", "Goodbye!"],
+    "great": ["Great! It was great chatting with you.", "Goodbye!"],
+    "good": ["Good! It was great chatting with you.", "Goodbye!"],
+    "nice": ["Nice! It was great chatting with you.", "Goodbye!"],
+    "excellent": ["Excellent! It was great chatting with you.", "Goodbye!"],
+    "super": ["Super! It was great chatting with you.", "Goodbye!"],
+    "superb": ["Superb! It was great chatting with you.", "Goodbye!"],
+    "marvelous": ["Marvelous! It was great chatting with you.", "Goodbye!"],
+    "wonderful": ["Wonderful! It was great chatting with you.", "Goodbye!"],
+    "splendid": ["Splendid! It was great chatting with you.", "Goodbye!"],
+    "lovely": ["Lovely! It was great chatting with you.", "Goodbye!"],
+    "beautiful": ["Beautiful! It was great chatting with you.", "Goodbye!"],
+    "gorgeous": ["Gorgeous! It was great chatting with you.", "Goodbye!"],
+    "stunning": ["Stunning! It was great chatting with you.", "Goodbye!"],
+    "breathtaking": ["Breathtaking! It was great chatting with you.", "Goodbye!"],
+    "outstanding": ["Outstanding! It was great chatting with you.", "Goodbye!"],
+    "exceptional": ["Exceptional! It was great chatting with you.", "Goodbye!"],
+    "remarkable": ["Remarkable! It was great chatting with you.", "Goodbye!"],
+    "impressive": ["Impressive! It was great chatting with you.", "Goodbye!"],
+    "incredible": ["Incredible! It was great chatting with you.", "Goodbye!"],
+    "unbelievable": ["Unbelievable! It was great chatting with you.", "Goodbye!"],
+    "amazingly": ["Amazingly! It was great chatting with you.", "Goodbye!"],
+    "extremely": ["Extremely! It was great chatting with you.", "Goodbye!"],
+    "extraordinarily": ["Extraordinarily! It was great chatting with you.", "Goodbye!"],
+    "incredibly": ["Incredibly! It was great chatting with you.", "Goodbye!"],
+    "unbelievably": ["Unbelievably! It was great chatting with you.", "Goodbye!"]
+}
+
+def preprocess_input(user_input):
+    # Convert to lowercase and remove punctuation
+    user_input = user_input.lower()
+    user_input = re.sub(r'[^\w\s]', '', user_input)
+    # Tokenize the input
+    tokens = user_input.split()
+    return tokens
+
+def identify_intent(tokens):
+    # Simple keyword matching
+    for token in tokens:
+        if token in knowledge_base:
+            return token
+    return None
+
+def generate_response(intent):
+    if intent in knowledge_base:
+        responses = knowledge_base[intent]
+        return random.choice(responses)
+    else:
+        return "I didn't understand that. Can you please rephrase?"
+
+def postprocess_response(response):
+    # Capitalize the first letter and add punctuation
+    response = response.capitalize() + "."
+    return response
+
+def chatbot():
+    while True:
+        user_input = input("You: ")
+        tokens = preprocess_input(user_input)
+        intent = identify_intent(tokens)
+        response = generate_response(intent)
+        response = postprocess_response(response)
+        print("Chatbot:", response)
+
+if __name__ == "__main__":
+    chatbot()
